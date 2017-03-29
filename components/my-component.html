@@ -1,0 +1,45 @@
+<template id="my-component-template">
+  <h1>Demo Template</h1>
+  <p id="demo-attr"></p>
+</template>
+
+<script>
+  (function (currentScript) {
+    imbedDoc = currentScript.ownerDocument
+    class MyElement extends HTMLElement {
+      constructor () {
+        super();
+        // Call to render template
+        this.render();
+      }
+
+      get demoAttr () {
+        return this.getAttribute('demo-attr');
+      }
+
+      set demoAttr (val) {
+        this.setAttribute('demo-attr', val);
+        this.render();
+      }
+
+      render () {
+        // Get template content      
+        const content = imbedDoc.querySelector('#my-component-template').content;
+        // Import content
+        const elem = imbedDoc.importNode(content, true);
+        // Add any attribute data
+        elem.querySelector('#demo-attr').textContent = this.getAttribute('demo-attr');
+        // Add template content to element
+        this.appendChild(elem);
+      }
+
+      attributeChangedCallback (attr, oldVal, newVal) {
+        // Modify necessary changes
+
+        // Re-render template
+        this.render();
+      }
+    }
+    customElements.define('my-component', MyElement);
+  })(document._currentScript || document.currentScript);
+</script>
